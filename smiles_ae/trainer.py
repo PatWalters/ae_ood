@@ -73,6 +73,7 @@ def fit(
     freeze_encoder: bool = False,
     log_every: int = 1,
     teacher_forcing: bool = True,
+    quiet: bool = False,
 ) -> List[Dict]:
     """Train `model` and (if save_path is given) checkpoint the best val model."""
     if freeze_encoder:
@@ -96,7 +97,7 @@ def fit(
         )
         dt = time.time() - t0
         history.append({"epoch": epoch, "train_loss": tr, "val_loss": val, "time_s": dt})
-        if epoch % log_every == 0:
+        if not quiet and epoch % log_every == 0:
             print(f"epoch {epoch:3d} | train {tr:.4f} | val {val:.4f} | {dt:5.1f}s")
         if save_path is not None and (val == val) and val < best:  # val==val filters NaN
             best = val
